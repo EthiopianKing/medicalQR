@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+    }
+
+    .container {
+        text-align: center;
+        margin-top: 100px;
+    }
+
+    .generate-button {
+        padding: 10px 20px;
+        font-size: 18px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+    }
+
+    .generate-button:hover {
+        background-color: #0056b3;
+    }
+
+    #qrcode {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
+<body>
+    <h2>Doctor's lifeQR</h2>
+    <form action="doctorLogin.php" method="POST">
+        <div>
+            <label for="usernameinput">Username:</label>
+            <input type="text" name="username" id="usernameinput" />
+            <label for="passwordinput">Password:</label>
+            <input type="text" name="passwordinput" id="passwordinput" />
+        </div>
+        <input type="submit" value="Login">
+    </form>
+    <div class="center-buttons">
+        <button onclick="window.location.href='register.html'">Create New User</button>
+    </div>
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor's Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            /* Add margin to separate the table and PDF list */
+        }
+
+        th,
+        td {
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        #pdf-container ul {
+            text-align: center;
+            padding: 0;
+            margin: 0;
+        }
+
+        .pdf-container {
+            margin-top: 20px;
+        }
+
+        /* Media query for screens smaller than 768px */
+        @media screen and (max-width: 768px) {
+            .container {
+                margin-top: 10px;
+            }
+
+            table {
+                font-size: 14px;
+                margin-bottom: 10px;
+                /* Reduce margin for smaller screens */
+            }
+
+            .pdf-container {
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Doctor's Page</h1>
+        <div id="doctorInfo">
+        </div>
+    </div>
+    <div class="pdf-container">
+        <h2>Uploaded PDFs</h2>
+        <ul id="pdf-list">
+        </ul>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <a href="docLogout.php" class="loggout">Log Out</a>
+    <script>
+        $(document).ready(function () {
+            // Make an AJAX request to fetch JSON data from doctorsPage.php
+            $.ajax({
+                url: 'doctorsPage.php',
+                method: 'GET',
+                dataType: 'json', // Expect JSON data
+                success: function (data) {
+                    // Create the grid (table) dynamically
+                    var table = '<table><tr><th>Full Name</th><th>Blood Type</th><th>Common Allergies</th><th>Weight</th><th>Sex</th><th>Height</th><th>Pre-Existing Conditions</th><th>Comments</th></tr>';
+                    $.each(data, function (index, record) {
+                        table += '<tr>';
+                        table += '<td>' + record.full_name + '</td>';
+                        table += '<td>' + record.blood_type + '</td>';
+                        table += '<td>' + record.common_allergies + '</td>';
+                        table += '<td>' + record.weight + '</td>';
+                        table += '<td>' + record.sex + '</td>';
+                        table += '<td>' + record.height + '</td>';
+                        table += '<td>' + record.pre_existing_conditions + '</td>';
+                        table += '<td>' + record.comments + '</td>';
+                        table += '</tr>';
+                    });
+                    table += '</table>';
+
+                    // Insert the dynamically created table into the 'doctorInfo' div
+                    $('#doctorInfo').html(table);
+                },
+                error: function (xhr, status, error) {
+                    console.error('AJAX request error:', status, error);
+                }
+            });
+        });
+
+        $(document).ready(function () {
+            // Make an AJAX request to fetch PDF data
+            $.ajax({
+                url: 'fetch_pdfs.php', // Replace with the actual URL to fetch PDF data
+                method: 'GET',
+                dataType: 'json', // Expect JSON data
+                success: function (data) {
+                    console.log(data);
+                    // Create a list for PDFs with names
+                    var pdfList = '';
+                    $.each(data, function (index, pdfData) {
+                        pdfList += '<li>';
+                        pdfList += '<a href="download_pdf.php?user_username=' + pdfData.username + '&pdf_name=' + pdfData.pdf_name + '">' + pdfData.pdf_name + '</a>';
+                        pdfList += ' - Uploaded by: ' + pdfData.username;
+                        pdfList += '</li>';
+                    });
+
+                    // Insert the PDF list into the 'pdf-list' ul
+                    $('#pdf-list').html(pdfList);
+                },
+                error: function (xhr, status, error) {
+                    console.error('AJAX request error:', status, error);
+                }
+            });
+        });
+
+    </script>
+</body>
+
+</html>
